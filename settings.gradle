@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Find"
 include ':app'
+include ':core'
