@@ -10,42 +10,52 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="@dimen/padding_small">
+        android:padding="@dimen/padding_normal">
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/iv_avatar"
-            android:layout_width="@dimen/img_size"
-            android:layout_height="@dimen/img_size"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:src="@color/is_loading"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_name"
+            android:id="@+id/tv_name_repository"
+            style="@style/TextAppearance.MaterialComponents.Headline6"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="@dimen/padding_normal"
-            style="@style/TextAppearance.MaterialComponents.Headline6"
-            tools:text="Name"
             android:textStyle="bold"
-            android:ellipsize="end"
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/iv_avatar"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="@+id/iv_avatar"
+            tools:text="Repository Name" />
 
         <com.google.android.material.textview.MaterialTextView
-            android:id="@+id/tv_type"
+            android:id="@+id/tv_description"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/padding_small"
-            android:ellipsize="end"
             app:layout_constrainedWidth="true"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/tv_name"
-            app:layout_constraintTop_toBottomOf="@+id/tv_name"
-            tools:text="Type" />
+            app:layout_constraintStart_toStartOf="@+id/tv_name_repository"
+            app:layout_constraintTop_toBottomOf="@+id/tv_name_repository"
+            tools:text="Description" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tv_star"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/padding_normal"
+            app:layout_constrainedWidth="true"
+            app:layout_constraintStart_toStartOf="@+id/tv_description"
+            app:layout_constraintTop_toBottomOf="@+id/tv_description"
+            android:drawableStart="@drawable/ic_star"
+            android:includeFontPadding="false"
+            android:gravity="center_vertical"
+            tools:text="Email" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

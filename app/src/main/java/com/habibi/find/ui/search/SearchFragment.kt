@@ -6,18 +6,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.doAfterTextChanged
-import androidx.core.widget.doOnTextChanged
 import com.habibi.core.data.source.Resource
 import com.habibi.find.databinding.SearchFragmentBinding
 import org.koin.android.viewmodel.ext.android.viewModel
 import android.view.inputmethod.EditorInfo
 
-import android.widget.TextView
 import android.widget.TextView.OnEditorActionListener
+import androidx.navigation.findNavController
 import com.habibi.core.data.source.local.entity.UsersEntity
-import com.habibi.find.adapter.CustomAdapter
-
 
 class SearchFragment : Fragment() {
 
@@ -26,7 +22,7 @@ class SearchFragment : Fragment() {
     private var _binding: SearchFragmentBinding? = null
     private val binding get() = _binding!!
 
-    private var isFirstTime = false
+    private var isFirstTime = true
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -43,7 +39,6 @@ class SearchFragment : Fragment() {
         binding.edtSearch.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val query = binding.edtSearch.text.toString()
-                Log.i("THIIS", "onViewCreated: $query")
                 if (query.isNotEmpty())
                     startSearchUsersObserver(query)
                 return@OnEditorActionListener true
@@ -59,31 +54,40 @@ class SearchFragment : Fragment() {
         viewModel.firstTimeLoad.observe(viewLifecycleOwner, {
             isFirstTime = it
         })
-
         viewModel.getKeywordSearch().observe(viewLifecycleOwner, {
-            if (isFirstTime)
-                if (it.isNullOrBlank())
+            if (isFirstTime) {
+                if (it.isNullOrBlank()) {
+                    Log.i("THIIIS", "startKeywordObserver: null")
                     onEmpty()
-                else {
+                } else {
+                    Log.i("THIIIS", "startKeywordObserver: not null")
                     viewModel.setFirstTimeLoad(false)
                     binding.edtSearch.setText(it)
                     viewModel.setName(it)
                     startSearchUsersObserver(it)
                 }
+            }
         })
     }
 
     private fun startSearchUsersObserver(query: String){
         viewModel.getSearchUsers(query).observe(viewLifecycleOwner, {
             when (it) {
-                is Resource.Loading -> onLoading()
-                is Resource.Empty -> onEmpty()
-                is Resource.Error -> onError()
+                is Resource.Loading -> {
+                    onLoading()
+                }
+                is Resource.Empty -> {
+                    viewModel.saveKeywordSearch("")
+                    onEmpty()
+                }
+                is Resource.Error -> {
+                    onError()
+                }
                 is Resource.Success -> {
-                    viewModel.setName(query)
-                    viewModel.saveKeywordSearch(query)
                     setAdapter(it.data!!)
                     onSuccess()
+                    viewModel.setName(query)
+                    viewModel.saveKeywordSearch(query)
                 }
             }
         })
@@ -91,12 +95,13 @@ class SearchFragment : Fragment() {
 
     private fun setAdapter(data: List<UsersEntity>) {
         binding.rvSearch.adapter = CustomAdapter(data){
-
+            val toDetailUserFragment = SearchFragmentDirections.actionSearchFragmentToDetailFragment()
+            toDetailUserFragment.login = it.login
+            view?.findNavController()?.navigate(toDetailUserFragment)
         }
     }
 
     private fun onLoading(){
-        Log.i("THIIIS", "onLoading: ")
         binding.apply {
             tilSearch.visibility = View.VISIBLE
             edtSearch.isEnabled = false
@@ -108,7 +113,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun onSuccess(){
-        Log.i("THIIIS", "onSuccess: ")
         binding.apply {
             tilSearch.visibility = View.VISIBLE
             edtSearch.isEnabled = true
@@ -120,7 +124,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun onEmpty(){
-        Log.i("THIIS", "onEmpty: ")
         binding.apply {
             tilSearch.visibility = View.VISIBLE
             edtSearch.isEnabled = true
@@ -132,7 +135,6 @@ class SearchFragment : Fragment() {
     }
 
     private fun onError(){
-        Log.i("THIIS", "onError: ")
         binding.apply {
             tilSearch.visibility = View.VISIBLE
             edtSearch.isEnabled = true
@@ -140,6 +142,10 @@ class SearchFragment : Fragment() {
             viewDataEmpty.root.visibility = View.GONE
             viewDataError.root.visibility = View.VISIBLE
             progressBar.visibility = View.GONE
+        }
+
+        binding.viewDataError.btnTryAgain.setOnClickListener {
+            viewModel.refreshLoad()
         }
     }
 

@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Find</string>
     <string name="search">Cari</string>
-    <string name="data_empty">Data Kosong!\nLakukan Pencarian!</string>
+    <string name="data_empty">Data Kosong!</string>
     <string name="try_again">Coba Lagi</string>
     <string name="something_wrong">Terjadi Kesalahan!</string>
 </resources>

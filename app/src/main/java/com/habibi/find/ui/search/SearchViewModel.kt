@@ -1,9 +1,6 @@
 package com.habibi.find.ui.search
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.habibi.core.data.source.IUsersDataSource
 import kotlinx.coroutines.launch
 
@@ -14,6 +11,8 @@ class SearchViewModel(private val iUsersDataSource: IUsersDataSource) : ViewMode
 
     private val _name = MutableLiveData<String>()
     val name get() = _name
+
+    private val loadTrigger = MutableLiveData(Unit)
 
     fun setFirstTimeLoad(isFirstTime: Boolean){
         _firstTimeLoad.value = isFirstTime
@@ -29,13 +28,18 @@ class SearchViewModel(private val iUsersDataSource: IUsersDataSource) : ViewMode
         iUsersDataSource.saveKeywordSearch(keyword)
     }
 
-    fun getSearchUsers(query: String) =
+    fun refreshLoad(){
+        loadTrigger.value = Unit
+    }
+
+    fun getSearchUsers(query: String) = loadTrigger.switchMap {
         iUsersDataSource.getSearchUsers(
             query,
-            queryIsSame(query)
+            queryIsNotSame(query)
         ).asLiveData()
+    }
 
-    private fun queryIsSame(query: String): Boolean{
+    private fun queryIsNotSame(query: String): Boolean{
         return query != name.value
     }
 }

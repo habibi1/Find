@@ -6,11 +6,10 @@ import com.habibi.core.data.source.local.entity.UsersEntity
 import com.habibi.core.data.source.remote.RemoteDataSource
 import com.habibi.core.data.source.remote.network.ApiResponse
 import com.habibi.core.data.source.remote.response.DetailUserResponse
+import com.habibi.core.data.source.remote.response.UserRepositoryResponseItem
 import com.habibi.core.data.source.remote.response.UsersItem
 import com.habibi.core.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
 
 class UsersRepository constructor(
     private val remoteDataSource: RemoteDataSource,
@@ -21,7 +20,7 @@ class UsersRepository constructor(
         object : NetworkBoundResource<List<UsersEntity>, List<UsersItem?>>(){
             override fun loadFromDB(): Flow<List<UsersEntity>> =
                 localDataSource.getSearchUsers()
-            override fun shouldFetch(data: List<UsersEntity>?): Boolean =
+            override fun shouldFetch(): Boolean =
                 queryIsSame
             override suspend fun createCall(): Flow<ApiResponse<List<UsersItem?>>> =
                 remoteDataSource.getSearchUsers(query)
@@ -35,15 +34,15 @@ class UsersRepository constructor(
         }.asFlow()
 
     override fun getDetailUser(login: String): Flow<Resource<DetailUserResponse>> =
-        object : NetworkBoundResource<DetailUserResponse, DetailUserResponse>(){
-            override fun loadFromDB(): Flow<DetailUserResponse> =
-                emptyFlow()
-            override fun shouldFetch(data: DetailUserResponse?): Boolean =
-                true
+        object : NetworkOnlyResource<DetailUserResponse>(){
             override suspend fun createCall(): Flow<ApiResponse<DetailUserResponse>> =
                 remoteDataSource.getDetailUser(login)
-            override suspend fun saveCallResult(data: DetailUserResponse) {}
-            override suspend fun deleteFromDB() {}
+        }.asFlow()
+
+    override fun getUserRepository(login: String): Flow<Resource<List<UserRepositoryResponseItem?>>> =
+        object : NetworkOnlyResource<List<UserRepositoryResponseItem?>>(){
+            override suspend fun createCall(): Flow<ApiResponse<List<UserRepositoryResponseItem?>>> =
+                remoteDataSource.getUserRepository(login)
         }.asFlow()
 
     override fun getKeywordSearch(): Flow<String> =

@@ -6,6 +6,11 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:$test_junit_version"
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_version"
     testImplementation "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version"
+    androidTestImplementation "androidx.test.espresso:espresso-contrib:$espresso_version"
+    implementation "androidx.test.espresso:espresso-idling-resource:$espresso_version"
+    androidTestImplementation "androidx.test:rules:$test_rule_version"
+
+    testImplementation "androidx.arch.core:core-testing:$android_core_test_version"
     testImplementation "org.jetbrains.kotlinx:kotlinx-coroutines-test:$coroutines_test_version"
 
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines_version"
@@ -15,6 +20,4 @@ dependencies {
     implementation "io.insert-koin:koin-core:$koin_version"
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-android-viewmodel:$koin_version"
-
-    implementation "androidx.paging:paging-runtime:$paging_version"
 }

@@ -2,8 +2,6 @@ package com.habibi.find.ui
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.navigation.fragment.NavHostFragment
-import com.habibi.find.R
 import com.habibi.find.databinding.ActivityMainBinding
 
 class MainActivity : AppCompatActivity() {

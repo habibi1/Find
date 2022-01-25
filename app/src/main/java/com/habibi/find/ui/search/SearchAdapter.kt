@@ -1,4 +1,4 @@
-package com.habibi.find.adapter
+package com.habibi.find.ui.search
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
