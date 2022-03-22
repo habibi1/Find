@@ -24,4 +24,10 @@ interface ApiService {
         @Path("login") login: String
     ): List<UserRepositoryResponseItem>
 
+    @GET("search/users")
+    suspend fun getSearchUsers(
+        @Query("q") query: String,
+        @Query("page") page: Int,
+        @Query("per_page") itemsPerPage: Int
+    ): SearchUsersResponse
 }

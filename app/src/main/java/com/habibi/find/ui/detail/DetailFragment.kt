@@ -36,7 +36,7 @@ class DetailFragment : Fragment() {
 
         val login = DetailFragmentArgs.fromBundle(arguments as Bundle).login
 
-        viewModel.getDetailUser(login).observe(viewLifecycleOwner, {
+        viewModel.getDetailUser(login).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                     holderDetailLoaded = false
@@ -52,9 +52,9 @@ class DetailFragment : Fragment() {
                 }
             }
             hideProgressBar()
-        })
+        }
 
-        viewModel.getUserRepository(login).observe(viewLifecycleOwner, {
+        viewModel.getUserRepository(login).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                     holderRepositoryLoaded = false
@@ -74,7 +74,7 @@ class DetailFragment : Fragment() {
                 }
             }
             hideProgressBar()
-        })
+        }
     }
 
     private fun onProfileLoading(){

@@ -2,6 +2,8 @@ package com.habibi.core.di
 
 import androidx.room.Room
 import com.habibi.core.BuildConfig
+import com.habibi.core.data.source.GithubRepository
+import com.habibi.core.data.source.IGithubDataSource
 import com.habibi.core.data.source.IUsersDataSource
 import com.habibi.core.data.source.UsersRepository
 import com.habibi.core.data.source.datastore.FindPreference
@@ -57,4 +59,5 @@ val repositoryModule = module {
         )
     }
     single<IUsersDataSource> { UsersRepository(get(), get(), get()) }
+    single<IGithubDataSource> { GithubRepository(get()) }
 }

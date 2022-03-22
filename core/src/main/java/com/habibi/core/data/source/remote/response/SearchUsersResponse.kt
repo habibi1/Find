@@ -1,5 +1,6 @@
 package com.habibi.core.data.source.remote.response
 
+import androidx.room.Entity
 import com.google.gson.annotations.SerializedName
 
 data class SearchUsersResponse(
@@ -11,9 +12,10 @@ data class SearchUsersResponse(
 	val incompleteResults: Boolean? = null,
 
 	@field:SerializedName("items")
-	val items: List<UsersItem?>? = null
+	val items: List<UsersItem> = emptyList()
 )
 
+@Entity
 data class UsersItem(
 
 	@field:SerializedName("login")

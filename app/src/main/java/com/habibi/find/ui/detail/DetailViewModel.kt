@@ -1,10 +1,10 @@
 package com.habibi.find.ui.detail
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.asLiveData
-import androidx.lifecycle.switchMap
+import androidx.lifecycle.*
 import com.habibi.core.data.source.IUsersDataSource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.launch
 
 class DetailViewModel(private val iUsersDataSource: IUsersDataSource) : ViewModel() {
 
@@ -26,4 +26,9 @@ class DetailViewModel(private val iUsersDataSource: IUsersDataSource) : ViewMode
     fun getUserRepository(login: String)= loadRepositoryTrigger.switchMap {
         iUsersDataSource.getUserRepository(login).asLiveData()
     }
+
+    fun getDetailAndRepository(login: String) =
+        viewModelScope.launch(Dispatchers.IO) {
+            iUsersDataSource.getDetailUser(login)
+        }
 }

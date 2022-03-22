@@ -2,9 +2,9 @@
 buildscript {
 
     ext {
-        build_gradel_version = "7.0.4"
+        build_gradel_version = '7.1.2'
         kotlin_version = "1.6.10"
-        safe_args_version = "2.3.5"
+        safe_args_version = '2.4.1'
 
         retrofit_version = "2.9.0"
         room_version = "2.4.1"

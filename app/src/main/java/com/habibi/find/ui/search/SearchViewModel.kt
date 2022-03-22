@@ -1,10 +1,17 @@
 package com.habibi.find.ui.search
 
 import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import com.habibi.core.data.source.IGithubDataSource
 import com.habibi.core.data.source.IUsersDataSource
+import com.habibi.core.data.source.remote.response.UsersItem
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.launch
 
-class SearchViewModel(private val iUsersDataSource: IUsersDataSource) : ViewModel() {
+class SearchViewModel(
+    private val iUsersDataSource: IUsersDataSource
+) : ViewModel() {
 
     private val _firstTimeLoad = MutableLiveData<Boolean>()
     val firstTimeLoad get() = _firstTimeLoad

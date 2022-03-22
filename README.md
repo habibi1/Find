@@ -17,7 +17,7 @@
 		
 ## Architecture
 
-[ Android Architecture Components](https://developer.android.com/topic/libraries/architecture)
+[Android Architecture Components](https://developer.android.com/topic/libraries/architecture)
 
 ## Libraries
 

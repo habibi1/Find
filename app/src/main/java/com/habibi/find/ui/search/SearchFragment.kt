@@ -1,7 +1,6 @@
 package com.habibi.find.ui.search
 
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -36,7 +35,7 @@ class SearchFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         startKeywordObserver()
 
-        binding.edtSearch.setOnEditorActionListener(OnEditorActionListener { v, actionId, event ->
+        binding.edtSearch.setOnEditorActionListener(OnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val query = binding.edtSearch.text.toString()
                 if (query.isNotEmpty())
@@ -51,27 +50,25 @@ class SearchFragment : Fragment() {
     private fun startKeywordObserver(){
         viewModel.setFirstTimeLoad(true)
 
-        viewModel.firstTimeLoad.observe(viewLifecycleOwner, {
+        viewModel.firstTimeLoad.observe(viewLifecycleOwner) {
             isFirstTime = it
-        })
-        viewModel.getKeywordSearch().observe(viewLifecycleOwner, {
+        }
+        viewModel.getKeywordSearch().observe(viewLifecycleOwner) {
             if (isFirstTime) {
                 if (it.isNullOrBlank()) {
-                    Log.i("THIIIS", "startKeywordObserver: null")
                     onEmpty()
                 } else {
-                    Log.i("THIIIS", "startKeywordObserver: not null")
                     viewModel.setFirstTimeLoad(false)
                     binding.edtSearch.setText(it)
                     viewModel.setName(it)
                     startSearchUsersObserver(it)
                 }
             }
-        })
+        }
     }
 
     private fun startSearchUsersObserver(query: String){
-        viewModel.getSearchUsers(query).observe(viewLifecycleOwner, {
+        viewModel.getSearchUsers(query).observe(viewLifecycleOwner) {
             when (it) {
                 is Resource.Loading -> {
                     onLoading()
@@ -90,7 +87,7 @@ class SearchFragment : Fragment() {
                     viewModel.saveKeywordSearch(query)
                 }
             }
-        })
+        }
     }
 
     private fun setAdapter(data: List<UsersEntity>) {
